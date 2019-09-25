@@ -12,16 +12,16 @@ function getPokemons(url) {
     return fetch(url).then(response=> response.json())
 }
 
-function postPokemon(url, newPokemon) {
+function postPokemon(url, data) {
     const configObj = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
-        body: JSON.stringify(newPokemon)
+        body: JSON.stringify(data)
     } 
-    return fetch(url, configObj).then(response => response.json())
+    return fetch(url, configObj)//.then(response => response.json())
 }
 
 function deletePokemon(url, id) {
@@ -89,14 +89,35 @@ function renderTrainers(trainer) {
 }  // end renderTrainers
  
 
-function addAPokemon(trainer) {
-    console.log("add a pokemon button clicked")
-    API.postPokemon(POKEMONS_URL)
+function addAPokemon(trainer) {  
+    let data = {
+        pokemon: { 
+            nickname: "NICKNAME",
+            species: "SPECIES!",
+            trainer_id: trainer.id
+        }
+    }
+
+    API.postPokemon(POKEMONS_URL, data).then(console.log)
+    // .then(data => {}    run the add the pokemon again })
+    let ul = event.target.parentElement.lastElementChild
+    let li = document.createElement("li")
+        li.innnerText = "New Pokemon here"
+    let releaseButton = document.createElement("button")
+        releaseButton.innerText = "Release"
+        releaseButton.className = "release"
+        //releaseButton.setAttribute("data-pokemon-id", pokemon.id)
+        releaseButton.addEventListener("click", () => releaseAPokemon(pokemon))
+        li.append(releaseButton)
+        ul.append(li)
+  
 }
 
 function releaseAPokemon(goodbyePokemon) {
-    //console.log(goodbyePokemon)
     API.deletePokemon(POKEMONS_URL, goodbyePokemon.id)
+    // as soon as I chained this onto a 'then' for the above it lost 'this' scope,
+    // so rendered optimistically. any other way to do this? e.g. with 
+    // response.ok ? (& how ??)
     let allUL = this.event.target.parentElement.parentElement
     let thisLI = this.event.target.parentElement
     allUL.removeChild(thisLI)
