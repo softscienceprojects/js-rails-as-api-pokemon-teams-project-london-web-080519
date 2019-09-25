@@ -22,7 +22,7 @@ function postPokemon(url, data) {
         },
         body: JSON.stringify(data)
     } 
-    return fetch(url, configObj)//.then(response => response.json())
+    return fetch(url, configObj).then(response => response.json())
 }
 
 function deletePokemon(url, id) {
@@ -91,26 +91,34 @@ function renderTrainers(trainer) {
  
 
 function addAPokemon(trainer) {  
-    let data = {
-        pokemon: { 
-            // nickname: undefined,
-            // species: undefined,
-            trainer_id: parseInt(trainer.id)
+    if (trainer.pokemons.length < 6) {
+        let data = {
+            pokemon: { 
+                // nickname: undefined,
+                // species: undefined,
+                trainer_id: parseInt(trainer.id)
+            }
         }
-    }
 
-    API.postPokemon(POKEMONS_URL, data).then((pokemon) => console.log(pokemon))
-    let ul = event.target.parentElement.lastElementChild
-    let li = document.createElement("li")
-        li.innnerText = "new pokemon"
-    let releaseButton = document.createElement("button")
-        releaseButton.innerText = "Release"
-        releaseButton.className = "release"
-        //releaseButton.setAttribute("data-pokemon-id", pokemon.id)
-        releaseButton.addEventListener("click", () => releaseAPokemon(pokemon))
-        li.append(releaseButton)
-        ul.append(li)
-  
+        API.postPokemon(POKEMONS_URL, data).then((pokemon) => addToCard(pokemon))
+        
+            function addToCard(newPoke) {
+            debugger;
+            let ul = localDetails.lastElementChild
+            let li = document.createElement("li")
+                li.innnerText = `${newPoke.nickname} (${newPoke.species})`
+            let releaseButton = document.createElement("button")
+                releaseButton.innerText = "Release"
+                releaseButton.className = "release"
+                releaseButton.setAttribute("data-pokemon-id", newPoke.id)
+                releaseButton.addEventListener("click", () => releaseAPokemon(newPoke))
+                li.append(releaseButton)
+                ul.append(li)
+            }
+    }   else {
+        alert("you have enough pokemon")
+    }
+    
 }
 
 function releaseAPokemon(goodbyePokemon) {
