@@ -17,7 +17,8 @@ function postPokemon(url, data) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json"
+          "Accept": "application/json",
+          "Access-Control-Allow-Origin" : "*"
         },
         body: JSON.stringify(data)
     } 
@@ -92,8 +93,8 @@ function renderTrainers(trainer) {
 function addAPokemon(trainer) {  
     let data = {
         pokemon: { 
-            nickname: "NICKNAME",
-            species: "SPECIES!",
+            nickname: undefined,
+            species: undefined,
             trainer_id: trainer.id
         }
     }
