@@ -72,17 +72,9 @@ function renderTrainers(trainer) {
     // it does pass the object and the iteration works but can't figure out what it's returning
     // in order to append everything to the parent node UL, defined in a different scope 
 
-    trainer.pokemons.forEach(pokemon => {
-        let li = document.createElement("li")
-        li.innerText = `${pokemon.nickname} (${pokemon.species})`
-        let releaseButton = document.createElement("button")
-        releaseButton.innerText = "Release"
-        releaseButton.className = "release"
-        releaseButton.setAttribute("data-pokemon-id", pokemon.id)
-        releaseButton.addEventListener("click", () => releaseAPokemon(pokemon))
-        li.append(releaseButton)
-        ul.append(li)
-    })                                                                                                                                                                                                                                                                                                                                                       
+
+// THIS IS WHAT NEEDS CHECKING     
+    trainer.pokemons.forEach(pokemon => addToCard(pokemon))                                                                                                                                                                                                                                                                                                    
 
     divCard.append( trainerName, addButton, ul )
     main.append( divCard )
@@ -101,34 +93,40 @@ function addAPokemon(trainer) {
         }
 
         API.postPokemon(POKEMONS_URL, data).then((pokemon) => addToCard(pokemon))
-        
-            function addToCard(newPoke) {
-            debugger;
-            let ul = localDetails.lastElementChild
-            let li = document.createElement("li")
-                li.innnerText = `${newPoke.nickname} (${newPoke.species})`
-            let releaseButton = document.createElement("button")
-                releaseButton.innerText = "Release"
-                releaseButton.className = "release"
-                releaseButton.setAttribute("data-pokemon-id", newPoke.id)
-                releaseButton.addEventListener("click", () => releaseAPokemon(newPoke))
-                li.append(releaseButton)
-                ul.append(li)
-            }
+              
     }   else {
         alert("you have enough pokemon")
-    }
-    
+        }
+}
+
+function addToCard(newPoke) {
+    // let ul = localDetails.lastElementChild
+    let ul = document.querySelector(`div[data-id="${newPoke.trainer_id}"]`)
+    let li = document.createElement("li")
+        li.innerText = `${newPoke.nickname} (${newPoke.species})`
+        li.setAttribute("data-li-id", newPoke.id)
+    let releaseButton = document.createElement("button")
+        releaseButton.innerText = "Release"
+        releaseButton.className = "release"
+        releaseButton.setAttribute("data-pokemon-id", newPoke.id)
+        releaseButton.addEventListener("click", () => releaseAPokemon(newPoke))
+        li.append(releaseButton)
+        ul.append(li)
 }
 
 function releaseAPokemon(goodbyePokemon) {
-    API.deletePokemon(POKEMONS_URL, goodbyePokemon.id)
+    API.deletePokemon(POKEMONS_URL, goodbyePokemon.id).then(pokemon => {
+        let ul = document.querySelector(`div[data-id="${pokemon.trainer_id}"]>ul`)
+        let li = document.querySelector(`li[data-li-id="${pokemon.id}"]`)
+        li.remove()
+        // let allUL = this.event.target.parentElement.parentElement
+        // let thisLI = this.event.target.parentElement
+        // allUL.removeChild(thisLI)
+    })
     // as soon as I chained this onto a 'then' for the above it lost 'this' scope,
     // so rendered optimistically. any other way to do this? e.g. with 
     // response.ok ? (& how ??)
-    let allUL = this.event.target.parentElement.parentElement
-    let thisLI = this.event.target.parentElement
-    allUL.removeChild(thisLI)
+    
 }
 
 // function removePokemon(sadPokemon) {

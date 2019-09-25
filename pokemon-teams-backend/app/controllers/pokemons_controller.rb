@@ -27,13 +27,13 @@ class PokemonsController < ApplicationController
         pokemon.save!
         # pokemon.name = Faker::Name.first_name
         # pokemon.species = Faker::Games::Pokemon.name
-        render json: pokemon.to_json
+        render json: pokemon
     end
 
     def destroy
         pokemon = Pokemon.find(params[:id])
         # is the below necessary? get errors if not there
-        render json: pokemon.to_json
+        render json: pokemon
         Pokemon.delete(pokemon)
     end
 
@@ -41,5 +41,7 @@ class PokemonsController < ApplicationController
 
     def pokemon_params
         params.require(:pokemon).permit(:nickname, :species, :trainer_id)
+        # this is probably what would work without needing to nest the original input:
+        # permit(:nickname, :species, :trainer_id)
     end
 end
