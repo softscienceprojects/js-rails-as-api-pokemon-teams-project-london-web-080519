@@ -23,11 +23,10 @@ class PokemonsController < ApplicationController
 
     def create
         # pokemon = Pokemon.new(pokemon_params)
-        pokemon = Pokemon.new(nickname: Faker::Name.first_name, species: Faker::Games::Pokemon.name, trainer_id: pokemon_params)
+        pokemon = Pokemon.new(nickname: Faker::Name.first_name, species: Faker::Games::Pokemon.name, trainer_id: pokemon_params[:trainer_id])
         pokemon.save!
         # pokemon.name = Faker::Name.first_name
         # pokemon.species = Faker::Games::Pokemon.name
-        # Pokemon.save!(nickname: Faker::Name.first_name, species: Faker::Games::Pokemon.name, trainer_id: trainer.id)
         render json: pokemon.to_json
     end
 

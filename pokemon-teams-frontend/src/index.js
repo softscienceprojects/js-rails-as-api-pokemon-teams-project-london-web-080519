@@ -93,17 +93,16 @@ function renderTrainers(trainer) {
 function addAPokemon(trainer) {  
     let data = {
         pokemon: { 
-            nickname: undefined,
-            species: undefined,
-            trainer_id: trainer.id
+            // nickname: undefined,
+            // species: undefined,
+            trainer_id: parseInt(trainer.id)
         }
     }
 
-    API.postPokemon(POKEMONS_URL, data).then(console.log)
-    // .then(data => {}    run the add the pokemon again })
+    API.postPokemon(POKEMONS_URL, data).then((pokemon) => console.log(pokemon))
     let ul = event.target.parentElement.lastElementChild
     let li = document.createElement("li")
-        li.innnerText = "New Pokemon here"
+        li.innnerText = "new pokemon"
     let releaseButton = document.createElement("button")
         releaseButton.innerText = "Release"
         releaseButton.className = "release"
