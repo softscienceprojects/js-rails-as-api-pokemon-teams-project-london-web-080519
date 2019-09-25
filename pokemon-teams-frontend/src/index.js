@@ -16,7 +16,8 @@ function postPokemon(url, newPokemon) {
     const configObj = {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Accept": "application/json"
         },
         body: JSON.stringify(newPokemon)
     } 
@@ -25,7 +26,13 @@ function postPokemon(url, newPokemon) {
 
 function deletePokemon(url, id) {
     const configObj = {
-        method: "DELETE"
+        method: "DELETE", 
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Access-Control-Allow-Origin" : "*", 
+            "Access-Control-Allow-Credentials" : true 
+          },
     }
     return fetch(`${url}/${id}`, configObj).then(response => response.json())
 }
@@ -84,12 +91,20 @@ function renderTrainers(trainer) {
 
 function addAPokemon(trainer) {
     console.log("add a pokemon button clicked")
+    API.postPokemon(POKEMONS_URL)
 }
 
 function releaseAPokemon(goodbyePokemon) {
     //console.log(goodbyePokemon)
     API.deletePokemon(POKEMONS_URL, goodbyePokemon.id)
+    let allUL = this.event.target.parentElement.parentElement
+    let thisLI = this.event.target.parentElement
+    allUL.removeChild(thisLI)
 }
+
+// function removePokemon(sadPokemon) {
+//     //let pokemonList = document.querySelector()
+// }
 
 
 // listPokemonsES6 = (trainer) => {
